@@ -8,3 +8,8 @@ export const updateMessage = message => ({
         type: 'UPDATE_MESSAGE',
         message
 });
+
+export const newMessage = message => ({
+        type: 'NEW_MESSAGE',
+        message
+})

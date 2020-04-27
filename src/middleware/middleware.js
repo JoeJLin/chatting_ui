@@ -1,10 +1,10 @@
 import * as actions from '../reducers/websocket';
 import { updateMessage } from '../actions';
-// import SockJS from 'sockjs-client';
-// import Stomp from 'stompjs';
+// import { useDispatch } from 'react-redux';
 
 const socketMiddleware = () => {
     let stompClient = null;
+    // const dispatch = useDispatch();
 
     const connect = store => {
         console.log('in connect');
@@ -14,20 +14,16 @@ const socketMiddleware = () => {
         SockJS = new SockJS('/greeting');
         stompClient = Stomp.over(SockJS);
 
-        stompClient.connect({}, onConnected, onError);
-
-        // this.setState({username});
-
+        stompClient.connect({}, function() { onConnected(store) }, onError);
 
     }
 
-    const onConnected = (store) => () => {
+    const onConnected = (store) => {
         console.log('connected!!!', store);
         // this.setState({ channelConnected: true });
 
-        stompClient.subscribe('/topic/greetings', onMessageReceived);
+        stompClient.subscribe('/topic/greetings', (message) => { onMessageReceived(store, message) });
 
-        // stompClient.send('/')
     }
 
     const onError = (error) => {
@@ -37,22 +33,27 @@ const socketMiddleware = () => {
         // });
     }
 
-    const sendMessage = store => messsage => {
-        store.dispatch(updateMessage(messsage));
+    const sendMessage = message => {
+        // store.dispatch(updateMessage(messsage));
+        console.log('in send message', message);
+        stompClient.send("/app/hello", {}, JSON.stringify(message));
+
     }
 
-    const onMessageReceived = store => (payload) => {
-        console.log(payload)
+    const onMessageReceived = (store, payload) => {
+        console.log('payload',payload);
+        console.log('store', store)
         let message = JSON.parse(payload.body);
-
-        if (message.type === 'CHAT') {
-            // this.state.messageList.push({
-            //     content: message.content,
-            //     sender: message.sender,
-            //     dateTime: message.dateTime
-            // })
-            sendMessage(message);
-        }
+        console.log('message',message)
+        store.dispatch(updateMessage(message));
+        // if (message.type === 'CHAT') {
+        //     // this.state.messageList.push({
+        //     //     content: message.content,
+        //     //     sender: message.sender,
+        //     //     dateTime: message.dateTime
+        //     // })
+        //     sendMessage(message);
+        // }
     }
 
     return store => next => action => {
@@ -61,7 +62,8 @@ const socketMiddleware = () => {
                 console.log('in middleware switch', store);
                 connect(store);
                 break;
-            // case 'NEW_MESSAGE':
+            case 'NEW_MESSAGE':
+                sendMessage(action.message);
             default:
                 return next(action);
         }

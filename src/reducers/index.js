@@ -5,7 +5,7 @@ import {combineReducers} from 'redux';
 
 const allReducers = combineReducers({
     user: userReducer,
-    message: messageReducer,
+    messageList: messageReducer,
     websocket: websocketReducer
 })
 

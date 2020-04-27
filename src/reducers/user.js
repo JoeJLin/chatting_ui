@@ -13,7 +13,7 @@ const userReducer = (state = initialState, action) => {
             };
             break;
         default:
-            console.log(state)
+            // console.log(state)
             return state;
     }
 };

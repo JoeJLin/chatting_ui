@@ -1,57 +1,58 @@
-import React, { Component, useState } from 'react';
-import {Row, Col, InputGroup, FormControl, Button} from 'react-bootstrap';
-import {useSelector, useDispatch, connect} from 'react-redux';
-import {setUser} from '../actions';
-import {wsConnect} from '../reducers/websocket';
+import React, { Component } from 'react';
+import { Row, Col, InputGroup, FormControl, Button } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { setUser } from '../actions';
+import { wsConnect } from '../reducers/websocket';
 
 
-function NameInput(props) {  
-    const [username, setUsername] = useState('');
+class NameInput extends Component {
+    constructor(props) {
+        super(props);
 
-    const user = useSelector(state => state.user);
-    const dispatch = useDispatch();
-
-    const handleUsernameChange = (event) => {
-        console.log(event.target.value);
-    
-        // dispatch(setUser(event.target.value));
-        setUsername(event.target.value);
-    }
-
-    const checkName = () => {
-        dispatch(wsConnect());
-        if(username.trim().length !== 0 && username !== null) {
-            dispatch(setUser({
-                username,
-                isNameChecked: true
-            }))
+        this.state = {
+            username: ''
         }
-        console.log('username', props.username)
     }
 
-    // render() {
+    handleUsernameChange = event => {
+        this.setState({
+            username: event.target.value
+        });
+    }
+
+    checkName = () => {
+        this.props.wsConnect();
+        if (this.state.username.trim().length !== 0 && this.state.username !== null) {
+            this.props.setUser({
+                username: this.state.username,
+                isNameChecked: true
+            })
+        }
+        console.log('username', this.props.username)
+    }
+
+    render() {
         return (
             <Row className='justify-content-center'>
-                <h1>name : {username}</h1>
+                <h1>name : {this.state.username}</h1>
                 <Col md={8}>
                     <InputGroup className='mb-3'>
                         <FormControl
                             placeholder='Please enter your name'
                             aria-label='Please enter your name'
-                            onChange={handleUsernameChange}
+                            onChange={this.handleUsernameChange}
                         />
                     </InputGroup>
                 </Col>
                 <Col md={2}>
-                    <Button variant='primary' onClick={checkName}>Let's Chat</Button>
+                    <Button variant='primary' onClick={this.checkName}>Let's Chat</Button>
                 </Col>
             </Row>
         )
-    // }
+    }
 }
 
 const mapStateToProps = state => {
-    console.log(state)
     return {
         username: state.user.username
     }
@@ -59,10 +60,11 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        setUser: ({username, isNameChecked}) => dispatch(setUser({
+        setUser: ({ username, isNameChecked }) => dispatch(setUser({
             username,
             isNameChecked
-        })) 
+        })),
+        wsConnect: () => dispatch(wsConnect())
     }
 }
 

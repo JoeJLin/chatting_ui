@@ -2,12 +2,12 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import ChatMessage from './component/ChatMessage';
-import ChatRoom from './component/ChatRoom/ChatRoom'
+import ChatContainer from './component/ChatContainer/ChatContainer'
 
 function App() {
   return (
     <div className="App">
-      <ChatRoom />
+      <ChatContainer />
     </div>
   );
 }
