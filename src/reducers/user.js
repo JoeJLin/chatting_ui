@@ -11,9 +11,7 @@ const userReducer = (state = initialState, action) => {
                 username : action.username,
                 isNameChecked: action.isNameChecked
             };
-            break;
         default:
-            // console.log(state)
             return state;
     }
 };

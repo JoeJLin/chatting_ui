@@ -1,7 +1,6 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import ChatMessage from './component/ChatMessage';
+// import ChatMessage from './component/ChatMessage';
 import ChatContainer from './component/ChatContainer/ChatContainer'
 
 function App() {

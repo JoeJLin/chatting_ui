@@ -10,7 +10,6 @@ export const websocketReducer = (state={ ...websocketInitialState }, action) => 
     switch(action.type) {
         case 'WS_CONNECT':
             return { ...state };
-            break;
         default:
             return state;
     }

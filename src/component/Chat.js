@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { newMessage } from '../actions';
+import MessageDisplayContainer from './MessageDisplayContainer/MessageDisplayContainer';
+import TextInput from './TextInput/TextInput'
+import { Row } from 'react-bootstrap';
 
 class Chat extends Component {
     constructor(props) {
@@ -30,51 +33,9 @@ class Chat extends Component {
     render() {
         return (
             (
-                <div>
-                    {this.props.messageList.map((msg, i) =>
-                        this.props.username === msg.sender ?
-
-                            <li className="you" key={i}>
-                                <div className="entete">
-                                    <h2>
-                                        <span className="sender"> {msg.sender} ~ (You)</span></h2>
-                                    <span> </span>
-                                </div>
-                                <div className="message">
-                                    {msg.content}
-                                </div>
-                                <div><h3>{msg.dateTime}</h3></div>
-                            </li>
-                            :
-                            <li className="you" key={i}>
-                                <div className="entete">
-                                    <h2>
-                                        <span className="sender"> {msg.sender}</span></h2>
-                                    <span> </span>
-                                </div>
-                                <div className="message">
-                                    {msg.content}
-                                </div>
-                                <div><h3>{msg.dateTime}</h3></div>
-                            </li>
-                    )}
-
-                    <div>
-                        <textarea
-                            id="msg"
-                            label="Type your message here..."
-                            placeholder="Press enter to send message"
-                            onChange={this.handleTyping}
-                            margin="normal"
-                            value={this.state.chatMessage}
-                            onKeyPress={event => {
-                                if (event.key === 'Enter') {
-                                    this.sendMessage();
-                                }
-                            }}
-                        />
-                        <button onClick={this.sendMessage}>send</button>
-                    </div>
+                <div style={{position:'relative', height:"100%"}}>
+                    <MessageDisplayContainer></MessageDisplayContainer>
+                    <TextInput></TextInput>
                 </div>)
 
         )
